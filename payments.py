@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from scipy.optimize import newton
 
 from accumulation import Annual
+from base import Float
 
 
 @dataclass
@@ -63,15 +64,15 @@ def discounted_values(discount_with, cashflows, timestamps):
     return [x / discount_with.fv(t) for x, t in zip(cashflows, timestamps)]
 
 
-def npv(interest_rate, cashflows, timestamps=None, accumulation=Annual):
+def npv(interest_rate, cashflows, timestamps=None, accumulation=Annual) -> Float:
     if timestamps is None:
         timestamps = list(range(len(cashflows)))
     discount_with = accumulation(interest_rate)
-    return sum(discounted_values(discount_with, cashflows, timestamps))
+    return Float(sum(discounted_values(discount_with, cashflows, timestamps)))
 
 
-def irr(cashflows, timestamps, accumulation):
+def irr(cashflows, timestamps, accumulation) -> Float:
     def f(interest_rate):
         return npv(interest_rate, cashflows, timestamps, accumulation)
 
-    return newton(f, x0=0.1)
+    return Float(newton(f, x0=0.1))
