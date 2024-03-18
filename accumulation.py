@@ -34,27 +34,18 @@ def monthly(interest_rate, t):
     return compound(interest_rate, t, frequency=12)
 
 
-def select_accumulation(coupons_per_year: int):
-    return {1: Annual, 2: Semiannual, 4: Quarterly}[coupons_per_year]
-
-
 accumulation_functions = [simple, continious, annual, semiannual, quarterly, monthly]
-
-from enum import Enum
-class Frequency(Enum):
-    Annual = 1
-    Semiannual = 2
-    Triannual = 3
-    Quarterly = 4
-    Monthly = 12
 
 
 @dataclass
 class Accumulation(ABC):
     interest_rate: float
 
-    def fv(self, t):
-        compound
+    def fv(self, t): ...
+
+    @staticmethod
+    def from_frequency(m_periods_per_year):
+        return {1: Annual, 2: Semiannual, 4: Quarterly, 12: Monthly}[m_periods_per_year]
 
 
 class Annual(Accumulation):

@@ -76,3 +76,15 @@ def irr(cashflows, timestamps, accumulation) -> Float:
         return npv(interest_rate, cashflows, timestamps, accumulation)
 
     return Float(newton(f, x0=0.1))
+
+
+def annuity(
+    amount: float, periods_per_year: int, years: int, months: int = 0
+) -> list[Payment]:
+    n_years = (years * 12 + months) / 12
+    return [Payment(amount, t) for t in sequence(n_years, periods_per_year)]
+
+
+def sequence(n_years: int, periods_per_year: int):
+    step = 1 / periods_per_year
+    return list((x + 1) * step for x in range(n_years * periods_per_year))
